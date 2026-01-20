@@ -9,6 +9,7 @@ You write a script to process 1,000 files. It crashes on file #500. Now you have
 Wrap your operations in a `Transaction`. If **any** error occurs, **nothing** happens on disk.
 
 ```python
+
 from fs_transaction import Transaction
 
 # No changes applied until the block finishes successfully
