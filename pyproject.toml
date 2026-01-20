@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "fs-transaction"
-version = "0.1.0"
+version = "0.1.1"
 description = "Atomic filesystem operations for safe batch processing."
 readme = "README.md"
 authors = [
@@ -18,5 +18,5 @@ classifiers = [
 requires-python = ">=3.7"
 
 [project.urls]
-"Homepage" = "https://github.com/yourusername/fs-transaction"
-"Bug Tracker" = "https://github.com/yourusername/fs-transaction/issues"
+"Homepage" = "https://github.com/SKAUL05/fs-transaction"
+"Bug Tracker" = "https://github.com/SKAUL05/fs-transaction/issues"
