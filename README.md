@@ -1,21 +1,71 @@
-# fs-transaction
+# fs-transaction 🛡️
 
-**Stop writing half-broken file scripts.** `fs-transaction` brings database-style atomicity to filesystem operations.
+[![PyPI version](https://badge.fury.io/py/fs-transaction.svg)](https://badge.fury.io/py/fs-transaction)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Python Versions](https://img.shields.io/pypi/pyversions/fs-transaction.svg)](https://pypi.org/project/fs-transaction/)
 
-## The Problem
-You write a script to process 1,000 files. It crashes on file #500. Now you have a corrupted state: 500 files moved, 500 remaining. You have to manually cleanup the mess.
+**Stop writing corrupted files.**
 
-## The Solution
-Wrap your operations in a `Transaction`. If **any** error occurs, **nothing** happens on disk.
+`fs-transaction` provides a Python context manager for **Atomic (ACID-compliant) file operations**. It ensures that your file writes are "all-or-nothing," preventing data corruption during crashes, power failures, or concurrent access.
+
+
+## 💥 The Problem
+In standard Python, writing to a file is risky:
+```python
+# DANGEROUS CODE
+with open("database.json", "w") as f:
+    f.write(start_processing())
+    # <--- CRASH HERE (Power loss, Exception, OOM)
+    f.write(finish_processing()) 
+# RESULT: "database.json" is now half-written and corrupted forever.
+```
+
+## ✅ The Solution
+`fs-transaction` uses the <b>Write-Replace Pattern:</b>
+
+1. It writes data to a temporary file.
+2. It successfully closes the file.
+3. It performs an atomic `os.replace` to swap the new file with the old one.
+
+If the script crashes at any point before step 3, your original file remains 100% untouched and valid.
+
+## 🆚 Why use fs-transaction?
+| Feature | Standard `open()` | `fs-transaction` |
+| :--- | :---: | :---: |
+| **Atomic Writes** | ❌ No (Partial writes possible) | ✅ **Yes** (All or nothing) |
+| **Crash Safety** | ❌ Low (Data corruption risk) | ✅ **High** (Original file safe) |
+| **Concurrency** | ❌ Manual locking required | ✅ **Thread-Safe** implementation |
+| **Cleanup** | ❌ Manual `try/finally` blocks | ✅ **Automatic** temp file cleanup |
+| **Ease of Use** | 🟡 Native | 🟢 **Native-like** Context Manager |
+
+## 📦 Installation
+
+```bash
+pip install fs-transaction
+```
+
+## 🚀 Usage
+
+### Basic Atomic Write
+Use `AtomicWrite` exactly like you use standard `open`.
 
 ```python
+from fs_transaction import AtomicWrite
+import json
 
-from fs_transaction import Transaction
+data = {"status": "processing", "items": [1, 2, 3]}
 
-# No changes applied until the block finishes successfully
-with Transaction() as t:
-    t.move("data.csv", "archive/data_2023.csv")
-    t.write("manifest.txt", "Archived successfully")
-    
-    # If this raises an error, the move is undone and manifest is never written.
-    t.copy("backup.img", "cloud/backup.img")
+# Even if this block raises an Exception, 'config.json' will NOT be touched.
+with AtomicWrite("config.json", mode="w") as f:
+    f.write(json.dumps(data))
+
+print("File written successfully and atomically.")
+```
+
+## 🤝 Contributing
+Contributions, issues, and feature requests are welcome!
+1. Fork the Project
+2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the Branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
