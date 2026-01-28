@@ -1,7 +1,7 @@
 # fs-transaction 🛡️
 
 [![PyPI version](https://badge.fury.io/py/fs-transaction.svg)](https://badge.fury.io/py/fs-transaction)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 [![Python Versions](https://img.shields.io/pypi/pyversions/fs-transaction.svg)](https://pypi.org/project/fs-transaction/)
 
 **Stop writing corrupted files.**
