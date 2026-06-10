@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "fs-transaction"
-version = "0.1.1"
+version = "0.2.0"
 description = "Atomic filesystem operations for safe batch processing."
 readme = "README.md"
 authors = [
@@ -12,11 +12,33 @@ authors = [
 ]
 classifiers = [
     "Programming Language :: Python :: 3",
-    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
     "Operating System :: OS Independent",
+    "Typing :: Typed",
 ]
-requires-python = ">=3.7"
+requires-python = ">=3.8"
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0",
+    "pytest-cov>=4.0",
+    "ruff>=0.4.0",
+]
 
 [project.urls]
 "Homepage" = "https://github.com/SKAUL05/fs-transaction"
 "Bug Tracker" = "https://github.com/SKAUL05/fs-transaction/issues"
+"Changelog" = "https://github.com/SKAUL05/fs-transaction/blob/main/CHANGELOG.md"
+
+[tool.ruff]
+target-version = "py38"
+line-length = 100
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
