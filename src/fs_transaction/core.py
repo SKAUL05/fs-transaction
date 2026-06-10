@@ -3,7 +3,7 @@ import uuid
 import threading
 import logging
 from pathlib import Path
-from typing import Union, List, Optional
+from typing import Union, List
 
 from .actions import BaseAction, FileMove, FileCopy, FileWrite, FileDelete
 

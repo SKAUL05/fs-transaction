@@ -138,6 +138,7 @@ class TestTransaction(unittest.TestCase):
             pass
         
         self.assertTrue(self.file_a.exists(), "Deleted file should be restored")
+        self.assertEqual(self.file_a.read_text(), original_content, "Restored content should match original")
     
     def test_rollback_overwrite_restores_original(self):
         """Verify overwritten file is restored to original content on rollback."""
@@ -395,7 +396,7 @@ class TestEdgeCases(unittest.TestCase):
     
     def test_empty_transaction(self):
         """Verify empty transaction commits without error."""
-        with Transaction() as t:
+        with Transaction():
             pass  # No operations
     
     def test_write_to_nested_directory(self):
@@ -436,7 +437,7 @@ class TestEdgeCases(unittest.TestCase):
     def test_exception_propagates(self):
         """Verify exceptions inside with block propagate (not swallowed)."""
         with self.assertRaises(ValueError):
-            with Transaction() as t:
+            with Transaction():
                 raise ValueError("This should propagate")
 
 
